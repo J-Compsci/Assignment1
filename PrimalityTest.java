@@ -11,7 +11,7 @@ public class PrimalityTest {
     public long st;
     public long end;
     public long time;
-    public ConcurrentLinkedQueue tenPrimes;
+    public ConcurrentLinkedQueue<Long> q;
 
     public int getNum(){
         return num.get();
@@ -37,6 +37,7 @@ public class PrimalityTest {
         set.num = new AtomicInteger(2);
         set.count = new AtomicInteger(0);
         set.sum = new AtomicLong(0);
+        set.q = new ConcurrentLinkedQueue<>();
 
         //ArrayList to keep track of thread completion
         set.pThreads = new ArrayList<>();
@@ -63,6 +64,11 @@ public class PrimalityTest {
 
         set.end = System.currentTimeMillis();
         set.time = set.end - set.st;
-        System.out.println("< " + set.time + " ms > < " + set.count + " > < "+ set.sum + " >");
+
+        while (set.q.size() > 10){
+            set.q.poll();
+        }
+
+        System.out.println("< " + set.time + " ms > < " + set.count + " > < "+ set.sum + " > \n< "+ set.q +" >");
     }
 }

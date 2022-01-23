@@ -26,6 +26,12 @@ public class PrimeFinder implements Runnable{
             if(Primes(testNum)){
                 set.incrCount();
                 set.addSum((long)testNum);
+
+                if(set.q.size() >= 10){
+                    set.q.poll();
+                }
+                
+                set.q.add((long)testNum);
             }
         }
     }
