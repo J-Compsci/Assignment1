@@ -1,9 +1,15 @@
+// Creating/Writing files
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+// Variables for concurrent operations
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class PrimalityTest {
+
     private AtomicInteger num;
     public ArrayList<Thread> pThreads;
     public AtomicInteger count;
@@ -61,14 +67,37 @@ public class PrimalityTest {
                 e.printStackTrace();
             }
         }
-
+        // Getting final time after thread completion
         set.end = System.currentTimeMillis();
         set.time = set.end - set.st;
 
+        // Remove any earlier extras just incase more than 10 remain in the Queue
         while (set.q.size() > 10){
             set.q.poll();
         }
 
-        System.out.println("< " + set.time + " ms > < " + set.count + " > < "+ set.sum + " > \n< "+ set.q +" >");
+        try {
+            File primes = new File("primes.txt");
+            
+            if (primes.createNewFile()){
+
+                // Print to make sure file was created
+                System.out.println("File created: " + primes.getName());
+
+                // Write prime results in prime.txt
+                FileWriter primeOutput = new FileWriter("primes.txt");
+                primeOutput.write("< " + set.time + " ms > < " + set.count + " > < "+ set.sum + " > \n< "+ set.q +" >");
+                primeOutput.close();
+
+            } else {
+                System.out.println("File exists.");
+            }
+        } catch (IOException e){
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+        }
+
+        // Print statement for checking output
+        //System.out.println("< " + set.time + " ms > < " + set.count + " > < "+ set.sum + " > \n< "+ set.q +" >");
     }
 }
