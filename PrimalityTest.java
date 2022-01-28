@@ -75,11 +75,9 @@ public class PrimalityTest {
             }
         }
 
-        System.out.println("Sum calculted");
-
         int c = 9;
         for(int i = max; i > max/10; i--){
-            
+
             if(set.psum[i]){
                 set.q[c] = i;
                 System.out.println(i);
