@@ -4,20 +4,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 // Variables for concurrent operations
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class PrimalityTest {
 
-    private AtomicInteger num;
+    public AtomicInteger num;
     public ArrayList<Thread> pThreads;
     public AtomicInteger count;
-    public AtomicLong sum;
+    public long sum;
+    public boolean psum[];
     public long st;
-    public long end;
     public long time;
-    public ConcurrentLinkedQueue<Long> q;
+    public long[] q;
+    public static int max = 100000000;
 
     public int getNum(){
         return num.get();
@@ -31,28 +31,26 @@ public class PrimalityTest {
         return count.incrementAndGet();
     }
 
-    // sum is long incase of large sum beyond int maximum
-    public long addSum(long value){
-        return sum.addAndGet(value);
-    }
-
     public static void main(String[] args){
         PrimalityTest set = new PrimalityTest();
 
-        //The numbers to check begin at 2 as 0 and 1 are not primes
-        set.num = new AtomicInteger(2);
+        set.num = new AtomicInteger(0);
         set.count = new AtomicInteger(0);
-        set.sum = new AtomicLong(0);
-        set.q = new ConcurrentLinkedQueue<>();
+        set.sum = 0;
+        set.psum = new boolean[max + 1];
+        set.q = new long[10];
 
         //ArrayList to keep track of thread completion
         set.pThreads = new ArrayList<>();
+
+        Arrays.fill(set.psum, false);
+        Arrays.fill(set.q, 0);
 
         Thread th;
         set.st = System.currentTimeMillis();
 
         for(int i = 1; i < 9; i++){
-            PrimeFinder pTh = new PrimeFinder(i, set);
+            PrimeFinder pTh = new PrimeFinder(set.num, set.count, set.psum);
             th = new Thread(pTh);
             th.start();
             set.pThreads.add(th);
@@ -68,12 +66,29 @@ public class PrimalityTest {
             }
         }
         // Getting final time after thread completion
-        set.end = System.currentTimeMillis();
-        set.time = set.end - set.st;
+        set.time = System.currentTimeMillis()-set.st;
+        System.out.println(set.time);
 
-        // Remove any earlier extras just incase more than 10 remain in the Queue
-        while (set.q.size() > 10){
-            set.q.poll();
+        for(int i = 2; i < max; i++){
+            if(set.psum[i]){
+                set.sum += i;
+            }
+        }
+
+        System.out.println("Sum calculted");
+
+        int c = 9;
+        for(int i = max; i > max/10; i--){
+            
+            if(set.psum[i]){
+                set.q[c] = i;
+                System.out.println(i);
+                c--;
+            }
+
+            if(c < 0){
+                break;
+            }
         }
 
         try {
@@ -86,7 +101,7 @@ public class PrimalityTest {
 
                 // Write prime results in prime.txt
                 FileWriter primeOutput = new FileWriter("primes.txt");
-                primeOutput.write("< " + set.time + " ms > < " + set.count + " > < "+ set.sum + " > \n< "+ set.q +" >");
+                primeOutput.write("< " + set.time + " ms > < " + set.count + " > < "+ set.sum + " > \n< "+ Arrays.toString(set.q) +" >");
                 primeOutput.close();
 
             } else {

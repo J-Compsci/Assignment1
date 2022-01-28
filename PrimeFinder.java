@@ -1,11 +1,15 @@
-public class PrimeFinder implements Runnable{
-    private int threadnum;
-    private int max = 100000000;
-    private PrimalityTest set;
+import java.util.concurrent.atomic.AtomicInteger;
 
-    public PrimeFinder(int threadnum, PrimalityTest set){
-        this.threadnum = threadnum;
-        this.set = set;
+public class PrimeFinder implements Runnable{
+    private int max = 100000000;
+    private AtomicInteger num;
+    private AtomicInteger count;
+    private boolean[] psum;
+
+    public PrimeFinder(AtomicInteger num, AtomicInteger count, boolean[] psum){
+        this.num = num;
+        this.count = count;
+        this.psum = psum;
     }
 
     @Override
@@ -17,21 +21,15 @@ public class PrimeFinder implements Runnable{
 			e.printStackTrace();
         }
 
-        while(set.getNum() <= max){
-            // Gets the next number value, then increments the number value
-            int testNum = set.incrNum();
+        while(num.get() <= max){
+            // Gets the next number value, then increments the number value          
+            int testNum = num.getAndIncrement();
 
             // If testNum is Prime, increment and get the count of primes
             // add prime value to the sum
             if(Primes(testNum)){
-                set.incrCount();
-                set.addSum((long)testNum);
-
-                if(set.q.size() >= 10){
-                    set.q.poll();
-                }
-                
-                set.q.add((long)testNum);
+                count.getAndIncrement();
+                psum[testNum] = true; 
             }
         }
     }
@@ -39,16 +37,20 @@ public class PrimeFinder implements Runnable{
     // Primes is a thread function
     // each PrimeFinder thread can calculate independently without more references to main function
     public boolean Primes(double n){
-        if (n <= 1) return false;
+        // Optimization method from Wikipedia
+        if( n == 2 || n == 3 ){
+            return true;
+        }
 
-        // No divisors greater than the sqrt
-        double upper = (Math.sqrt(n));
+        if( n <= 1 || n % 2 == 0 || n % 3 == 0 ){
+            return false;
+        }
 
-        for (int i = 2; i <= upper; i++){
-            // Check if n is divisible by all values lower than sqrt, starting with 2 (evens)
-            if(n % i == 0){
+        for ( int i = 5; i * i <= n; i += 6 ){
+            if( n % i == 0 || n % ( i + 2 ) == 0 ){
                 return false;
             }
+
         }
 
         return true;
