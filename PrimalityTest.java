@@ -19,18 +19,6 @@ public class PrimalityTest {
     public long[] q;
     public static int max = 100000000;
 
-    public int getNum(){
-        return num.get();
-    }
-    
-    public int incrNum(){
-        return num.getAndIncrement();
-    }
-
-    public int incrCount(){
-        return count.incrementAndGet();
-    }
-
     public static void main(String[] args){
         PrimalityTest set = new PrimalityTest();
 
