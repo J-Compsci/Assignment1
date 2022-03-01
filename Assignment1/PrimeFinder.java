@@ -14,12 +14,6 @@ public class PrimeFinder implements Runnable{
 
     @Override
     public void run(){
-        try{
-            Thread.sleep(100);
-        }catch(InterruptedException e){
-            // TODO Auto-generated catch block
-			e.printStackTrace();
-        }
 
         while(num.get() <= max){
             // Gets the next number value, then increments the number value          
@@ -36,7 +30,7 @@ public class PrimeFinder implements Runnable{
 
     // Primes is a thread function
     // each PrimeFinder thread can calculate independently without more references to main function
-    public boolean Primes(double n){
+    public static boolean Primes(double n){
         // Optimization method from Wikipedia
         if( n == 2 || n == 3 ){
             return true;
