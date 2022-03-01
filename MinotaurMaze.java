@@ -31,13 +31,12 @@ class GuestThreads implements Runnable{
         while(end.get() == false){
             //attempt to get into the maze, the scheduler chooses (random)
             //block or do nothing until thread's turn
-            
             mazeLock.lock();
             System.out.println("Guest " + num + " obtained the mazelock");
             try{
                 //check if its the leader guest thread no.1 and the cupcake is gone, someone new ate it 
                 if(num == 1 && cupcake.get() == false && counter < guests){
-                    System.out.println("A cupcake was taken, guest 1 is requesting the cakeLock to replace the cupcake...");
+                    System.out.println("A cupcake was taken, guest 1 is requesting the cakeLock to replace the cupcake.");
                     //If the cupcake's gone request the cup(cakeLock) to get a new one
                     cakeLock.lock();
                     System.out.println("cakeLock acquired");
@@ -70,10 +69,10 @@ class GuestThreads implements Runnable{
                     }
                 }
 
-                //number 1 - If the cupcake is there, leave without eating or marking an additional guest
-                //other guests if the cupcake is not there, or you have eaten or both leave
+                //number 1 - If the cupcake is there, leave without replacing the cupcake or marking an additional guest
+                //other guests if the cupcake is not there, or you have eaten one already, or both, leave
 
-            }finally {
+            } finally {
                 mazeLock.unlock();
                 System.out.println("released mazeLock");
             }
@@ -100,7 +99,7 @@ public class MinotaurMaze{
         ArrayList<Thread> gThreads = new ArrayList<>();
         Scanner user_in = new Scanner(System.in);
 
-        System.out.println("Enter number of guests: (max 8)\n");
+        System.out.println("Enter number of guests: (max 8)");
         guests = user_in.nextInt();
         user_in.close();
 
