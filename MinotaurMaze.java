@@ -32,14 +32,14 @@ class GuestThreads implements Runnable{
             //attempt to get into the maze, the scheduler chooses (random)
             //block or do nothing until thread's turn
             mazeLock.lock();
-            System.out.println("Guest " + num + " obtained the mazelock");
+            //System.out.println("Guest " + num + " obtained the mazelock");
             try{
                 //check if its the leader guest thread no.1 and the cupcake is gone, someone new ate it 
                 if(num == 1 && cupcake.get() == false && counter < guests){
-                    System.out.println("A cupcake was taken, guest 1 is requesting the cakeLock to replace the cupcake.");
+                    //System.out.println("A cupcake was taken, guest 1 is requesting the cakeLock to replace the cupcake.");
                     //If the cupcake's gone request the cup(cakeLock) to get a new one
                     cakeLock.lock();
-                    System.out.println("cakeLock acquired");
+                    //System.out.println("cakeLock acquired");
 
                     try{
                         //update the counter for the additional guest visit
@@ -47,22 +47,22 @@ class GuestThreads implements Runnable{
                         // otherwise set and leave the cupcake
             
                         counter++;
-                        System.out.println("counter updated to " + counter);
+                        //System.out.println("counter updated to " + counter);
                         if(counter == guests){ 
-                            System.out.println("All guests have visited."); 
+                            //System.out.println("All guests have visited."); 
                             end.set(true);
                         } else {
-                            System.out.println("A new cupcake was placed");
+                            //System.out.println("A new cupcake was placed");
                             cupcake.set(true);
                         }
                     }finally{
                         cakeLock.unlock();
-                        System.out.println("released cakeLock");
+                        //System.out.println("released cakeLock");
                     }
 
                 }else {
                     if(num != 1 && cupcake.get() == true && eaten == false){
-                        System.out.println("Guest " + num + " finished the maze and is eating the cupcake.");
+                        //System.out.println("Guest " + num + " finished the maze and is eating the cupcake.");
 
                         cupcake.set(false);
                         eaten = true;
@@ -74,7 +74,7 @@ class GuestThreads implements Runnable{
 
             } finally {
                 mazeLock.unlock();
-                System.out.println("released mazeLock");
+                //System.out.println("released mazeLock");
             }
         }
     }
@@ -99,7 +99,7 @@ public class MinotaurMaze{
         ArrayList<Thread> gThreads = new ArrayList<>();
         Scanner user_in = new Scanner(System.in);
 
-        System.out.println("Enter number of guests: (max 8)");
+        System.out.println("Enter number of guests:");
         guests = user_in.nextInt();
         user_in.close();
 
@@ -121,7 +121,7 @@ public class MinotaurMaze{
                 e.printStackTrace();
             }
         }
-        System.out.println("Threads joined");
+        System.out.println("Threads joined, all guests have visited the maze.");
 
     }
 }
