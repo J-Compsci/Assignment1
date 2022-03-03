@@ -4,25 +4,27 @@ import java.util.concurrent.locks.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 class GuestThreads implements Runnable{
-    public int guests;
+
     private boolean eaten;
-    private int num;
     private int counter;
+    private int num;
     private Lock cakeLock;
     private Lock mazeLock;
+
     public AtomicBoolean cupcake;
     public AtomicBoolean end;
-
+    public int guests;
 
     public GuestThreads(int num, AtomicBoolean end, int counter, Lock mazeLock, Lock cakeLock, AtomicBoolean cupcake){
-        this.num = num;
+        this.cakeLock = cakeLock;
+        this.counter = counter;
+        this.cupcake = cupcake;
+        this.eaten = false;
         this.end = end;
+        // guests other than designated leader aka n-1
         this.guests = MinotaurMaze.guests - 1;
         this.mazeLock = mazeLock;
-        this.cakeLock = cakeLock;
-        this.cupcake = cupcake;
-        this.counter = counter;
-        this.eaten = false;
+        this.num = num;
     }
 
     @Override
@@ -32,14 +34,12 @@ class GuestThreads implements Runnable{
             // attempt to get into the maze, the scheduler chooses (random)
             // block or do nothing until thread's turn
             mazeLock.lock();
-            // System.out.println("Guest " + num + " obtained the mazelock");
             try{
                 //check if its the leader guest thread no.1 and the cupcake is gone, someone new ate it 
                 if(num == 1 && cupcake.get() == false && counter < guests){
-                    // System.out.println("A cupcake was taken, guest 1 is requesting the cakeLock to replace the cupcake.");
-                    // If the cupcake's gone request the cup(cakeLock) to get a new one
+
+                    // If the cupcake's gone the leader requests the cup(cakeLock) to get a new one
                     cakeLock.lock();
-                    // System.out.println("cakeLock acquired");
 
                     try{
                         // update the counter for the additional guest visit
@@ -47,30 +47,38 @@ class GuestThreads implements Runnable{
                         // otherwise set and leave the cupcake
             
                         counter++;
-                        // System.out.println("counter updated to " + counter);
+
                         if(counter == guests){ 
-                            // System.out.println("All guests have visited."); 
+
+                            // All guests have been accounted for
                             end.set(true);
+
                         } else {
-                            // System.out.println("A new cupcake was placed");
+
+                            // Replace the cupcake
                             cupcake.set(true);
                         }
-                    }finally{
+
+                    } finally {
+
                         cakeLock.unlock();
                         // System.out.println("released cakeLock");
                     }
 
                 }else {
+
+                    // For the non-leader guests, if the cupcake is there and they have not eaten one yet, they can eat it
                     if(num != 1 && cupcake.get() == true && eaten == false){
                         // System.out.println("Guest " + num + " finished the maze and is eating the cupcake.");
 
+                        // No cupcake
                         cupcake.set(false);
+
+                        // This guest has eaten
                         eaten = true;
                     }
+                    //If there isn't a cupcake or they have already eaten, leave
                 }
-
-                // number 1 - If the cupcake is there, leave without replacing the cupcake or marking an additional guest
-                // other guests if the cupcake is not there, or you have eaten one already, or both, leave
 
             } finally {
                 mazeLock.unlock();
@@ -81,11 +89,12 @@ class GuestThreads implements Runnable{
 }
 
 public class MinotaurMaze{
+
+    public AtomicBoolean cupcake;
+    public AtomicBoolean end;
     public Lock cakeLock;
     public Lock mazeLock;
-    public AtomicBoolean end;
     public int counter;
-    public AtomicBoolean cupcake;
     public static int guests;
 
     public static void main(int nguests){
@@ -96,7 +105,6 @@ public class MinotaurMaze{
         maze.cupcake = new AtomicBoolean(true);
         maze.counter = 0;
 
-        //Ask for num of guests
         guests = nguests;
         ArrayList<Thread> gThreads = new ArrayList<>();
 

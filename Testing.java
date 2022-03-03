@@ -12,12 +12,14 @@ public class Testing {
         int vVisitors;
         Scanner user_in = new Scanner(System.in);
 
-        System.out.println("Enter number of maze guests:");
+        System.out.println("Enter number (int) of maze guests:");
         mGuests = user_in.nextInt();
-        System.out.println("Enter number of vase visitors:");
+
+        System.out.println("Enter number (int) of vase visitors:");
         vVisitors = user_in.nextInt();
-        user_in.close();
         
+        user_in.close();
+
         minotaur(mGuests);
         vase(vVisitors);
     }

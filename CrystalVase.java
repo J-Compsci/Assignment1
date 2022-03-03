@@ -13,7 +13,6 @@ class Guests implements Runnable{
         this.num = num;
         this.q = q;
         this.showroom = showroom;
-
     };
 
     @Override
@@ -24,7 +23,7 @@ class Guests implements Runnable{
         try {
             Thread.sleep(rnd.nextInt(50));
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
+            // Catch block
             e.printStackTrace();
         }
 
@@ -33,19 +32,20 @@ class Guests implements Runnable{
         // Each thread loops until it does not requeue, make sure its not empty just in case
         while (!q.isEmpty() && q.contains(num)){
 
-            //check if thread is now the head of the queue, if it is try to acquire the room lock
+            // check if thread is now the head of the queue, if it is try to acquire the room lock
             if(!q.isEmpty() && q.peek() == num){
                 showroom.lock();
 
+                // If they acquire the lock they can leave the queue to enter the room
                 try{
-                    //System.out.println("Thread" + num + " has entered the room");
                     q.poll();
-                    //decide if they want to requeue
-                    if(rnd.nextDouble() > 0.4){
+                    // Decide if they want to requeue, y/n
+                    if(rnd.nextDouble() > 0.5){
                         CrystalVase.req(num);
                     }
 
                 } finally{
+                    // When done release the lock for the current head of the queue to enter
                     showroom.unlock();
                 }
             }
@@ -67,8 +67,9 @@ public class CrystalVase {
     public static void main(int nguests){
 
         CrystalVase view = new CrystalVase();
-        roomLine = new ConcurrentLinkedQueue<Integer>();
         view.showroom = new ReentrantLock();
+
+        roomLine = new ConcurrentLinkedQueue<Integer>();
         gThreads = new ArrayList<Thread>();
         guest_num = nguests;
         
@@ -86,7 +87,7 @@ public class CrystalVase {
             try {
                 t.join();
             } catch(InterruptedException e){
-                // TODO Auto-generated catch block
+                // Catch block
                 e.printStackTrace();
             }
         }
