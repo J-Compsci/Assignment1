@@ -64,17 +64,13 @@ public class CrystalVase {
         roomLine.add(num);
     }
 
-    public static void main(String [] args){
-
-        Scanner user_in = new Scanner(System.in);
-        System.out.println("Enter number of guests:");
-        guest_num = user_in.nextInt();
-        user_in.close();
+    public static void main(int nguests){
 
         CrystalVase view = new CrystalVase();
         roomLine = new ConcurrentLinkedQueue<Integer>();
         view.showroom = new ReentrantLock();
         gThreads = new ArrayList<Thread>();
+        guest_num = nguests;
         
         Thread th;
 
@@ -94,6 +90,6 @@ public class CrystalVase {
                 e.printStackTrace();
             }
         }
-        System.out.println("Queue is now empty.");
+        System.out.println("Vase queue is now empty.");
     }
 }

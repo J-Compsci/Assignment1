@@ -88,7 +88,7 @@ public class MinotaurMaze{
     public AtomicBoolean cupcake;
     public static int guests;
 
-    public static void main(String args[]){
+    public static void main(int nguests){
         MinotaurMaze maze = new MinotaurMaze();
         maze.cakeLock = new ReentrantLock();
         maze.mazeLock = new ReentrantLock();
@@ -97,12 +97,8 @@ public class MinotaurMaze{
         maze.counter = 0;
 
         //Ask for num of guests
+        guests = nguests;
         ArrayList<Thread> gThreads = new ArrayList<>();
-        Scanner user_in = new Scanner(System.in);
-
-        System.out.println("Enter number of guests:");
-        guests = user_in.nextInt();
-        user_in.close();
 
         Thread th;
 
@@ -123,7 +119,7 @@ public class MinotaurMaze{
             }
         }
 
-        System.out.println("Threads joined, all guests have visited the maze.");
+        System.out.println("All guests have visited the maze.");
 
     }
 }

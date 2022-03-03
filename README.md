@@ -12,12 +12,16 @@ javac PrimalityTest.java
 java PrimalityTest
 
 # Assignment 2
+Testing.java
+
 MinotaurMaze.java
 
 CrystalVase.java
 
-To compile and run problem 1:
+To compile and run problem 1 & 2:
 
-javac MinotaurMaze.java
+javac Testing.java
 
-java MinotaurMaze
+java Testing
+
+(follow prompts)
