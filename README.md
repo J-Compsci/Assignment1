@@ -14,7 +14,9 @@ java PrimalityTest
 # Assignment 2
 MinotaurMaze.java
 
-To compile and run:
+CrystalVase.java
+
+To compile and run problem 1:
 
 javac MinotaurMaze.java
 
