@@ -135,12 +135,6 @@ public class MinoPresents implements Set1{
         return (curr.tag == tag && !marked[0]);
     }
 
-    /*public boolean compareAndSet(int tag, Node expected, Node newNode, boolean expectedMark, boolean newMark){
-        AtomicReference<Long> pre = new AtomicReference(tag);
-
-
-    }*/
-
     class Window{
         public Node pred, curr;
 
@@ -216,7 +210,7 @@ public class MinoPresents implements Set1{
             }
         }
 
-        System.out.println("Guest Presents: "+ nguests + "\nItems left in bag: "+ presentBag.numItems(presentBag, nguests)+"\nCards written: "+presentBag.cards.size());
+        System.out.println("File: MinoPresents.java\n Guest Presents: "+ nguests + "\n Items left in bag: "+ presentBag.numItems(presentBag, nguests)+"\n Cards written: "+presentBag.cards.size());
 
     }
 }

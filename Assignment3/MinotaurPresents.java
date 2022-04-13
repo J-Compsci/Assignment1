@@ -242,7 +242,7 @@ public class MinotaurPresents implements Set{
             }
         }
 
-        System.out.println("Guest Presents: "+ nguests + "\nItems left in bag: "+ presentBag.numItems(presentBag, nguests)+"\nCards written: "+presentBag.cards.size());
+        System.out.println("File: MinotaurPresents.java\n Guest Presents: "+ nguests + "\n Items left in bag: "+ presentBag.numItems(presentBag, nguests)+"\n Cards written: "+presentBag.cards.size());
 
     }
 }

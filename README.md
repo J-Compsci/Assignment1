@@ -1,4 +1,4 @@
-# Assignment1
+# - Assignment1
 Super Basic Primality Algorithm ~1 minute
 
 Multi-threaded primality from 1 to 100000000
@@ -11,7 +11,7 @@ javac PrimalityTest.java
 
 java PrimalityTest
 
-# Assignment 2
+# -- Assignment 2
 Testing.java
 
 MinotaurMaze.java
@@ -26,7 +26,7 @@ java Testing
 
 (follow prompts)
 
-# Assignment 3
+# --- Assignment 3
 
 TestFile.java
 
